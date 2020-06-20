@@ -9,6 +9,7 @@ import com.mindorks.bootcamp.learndagger.di.NetworkInfo
 
 import dagger.Module
 import dagger.Provides
+import io.reactivex.disposables.CompositeDisposable
 
 @Module
 class ApplicationModule(private val application: MyApplication) {
@@ -28,4 +29,7 @@ class ApplicationModule(private val application: MyApplication) {
     @Provides
     @NetworkInfo
     fun provideApiKey(): String = "SOME_API_KEY"
+
+    @Provides
+    fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 }
