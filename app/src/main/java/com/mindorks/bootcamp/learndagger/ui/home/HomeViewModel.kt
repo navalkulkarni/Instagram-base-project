@@ -20,6 +20,6 @@ class HomeViewModel constructor(
     val testData = MutableLiveData<String>()
 
     override fun onCreate() {
-        testData.postValue("Hello from MainViewModel")
+        testData.postValue("Hello from HomeViewModel")
     }
 }
