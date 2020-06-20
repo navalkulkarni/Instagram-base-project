@@ -12,21 +12,26 @@ import com.mindorks.bootcamp.learndagger.ui.home.HomeFragment
 import javax.inject.Inject
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import com.mindorks.bootcamp.learndagger.di.component.ActivityComponent
+import com.mindorks.bootcamp.learndagger.ui.base.BaseActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<MainViewModel>() {
 
-    @Inject
-    lateinit var viewModel: MainViewModel
+    override fun provideLayoutId(): Int = R.layout.activity_main
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        getDependencies()
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun injectDependencies(activityComponent: ActivityComponent) = activityComponent.inject(this)
 
-        val tvData = findViewById<TextView>(R.id.tv_message)
-        tvData.text = viewModel.someData
-
+    override fun setupView(savedInstanceState: Bundle?) {
         addHomeFragment()
+    }
+
+    override fun setupObservers() {
+        super.setupObservers()
+        viewModel.testData.observe(this, Observer {
+            tv_message.text = it
+        })
     }
 
     private fun addHomeFragment() {
@@ -37,13 +42,5 @@ class MainActivity : AppCompatActivity() {
                     .commit()
         }
     }
-
-    private fun getDependencies() {
-        DaggerActivityComponent
-                .builder()
-                .applicationComponent((application as MyApplication).applicationComponent)
-                .activityModule(ActivityModule(this))
-                .build()
-                .inject(this)
-    }
 }
+
