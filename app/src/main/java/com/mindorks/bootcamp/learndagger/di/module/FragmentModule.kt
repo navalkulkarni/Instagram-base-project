@@ -3,11 +3,14 @@ package com.mindorks.bootcamp.learndagger.di.module
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mindorks.bootcamp.learndagger.data.local.DatabaseService
 import com.mindorks.bootcamp.learndagger.data.remote.NetworkService
 import com.mindorks.bootcamp.learndagger.di.ActivityContext
+import com.mindorks.bootcamp.learndagger.di.FragmentScope
 import com.mindorks.bootcamp.learndagger.ui.base.BaseFragment
 import com.mindorks.bootcamp.learndagger.ui.home.HomeViewModel
+import com.mindorks.bootcamp.learndagger.ui.home.Post.PostAdapter
 import com.mindorks.bootcamp.learndagger.utils.NetworkHelper
 import com.mindorks.bootcamp.learndagger.utils.ViewModelProviderFactory
 import dagger.Module
@@ -31,4 +34,11 @@ class FragmentModule(private val fragment: BaseFragment<*>) {
             fragment, ViewModelProviderFactory(HomeViewModel::class) {
         HomeViewModel(compositeDisposable, networkHelper, databaseService, networkService)
     }).get(HomeViewModel::class.java)
+
+    @Provides
+    @FragmentScope
+    fun providePostAdapter() = PostAdapter(fragment.lifecycle, ArrayList())
+
+    @Provides
+    fun provideLinearLayoutManager() = LinearLayoutManager(fragment.context)
 }
